@@ -1,0 +1,180 @@
+@charset "UTF-8";
+/* 知花屿 · 花笺（诗词填字）—— 只服务 huajian.html，不侵入全站样式 */
+
+.hj-main { padding-bottom: 80px; }
+
+/* ---------- 卷轴选择 ---------- */
+.hj-vols { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 28px; }
+.hj-vol {
+  display: flex; flex-direction: column; gap: 1px; align-items: flex-start;
+  padding: 9px 15px; border: 1px solid var(--line2); border-radius: var(--r-sm);
+  background: #fff; transition: .18s ease; text-align: left;
+}
+.hj-vol b { font-family: var(--serif); font-size: 14px; font-weight: 600; letter-spacing: .02em; }
+.hj-vol small { font-size: 11px; color: var(--ink3); letter-spacing: .04em; }
+.hj-vol:hover { border-color: var(--brand); transform: translateY(-1px); }
+.hj-vol.is-on { border-color: var(--brand); background: var(--brand-soft); }
+.hj-vol.is-on b { color: var(--accent-dark); }
+.hj-vol.is-done b::after {
+  content: "✓"; margin-left: 6px; color: var(--sage); font-size: 12px;
+}
+
+/* ---------- 主舞台 ---------- */
+.hj-stage { display: grid; grid-template-columns: minmax(0, 1fr) 336px; gap: 30px; align-items: start; }
+@media (max-width: 1020px) { .hj-stage { grid-template-columns: 1fr; } }
+
+.hj-card {
+  position: relative; padding: 26px 22px;
+  background: var(--card); border: 1px solid var(--line2); border-radius: var(--r);
+  box-shadow: 0 1px 2px rgba(139, 111, 71, .05), 0 26px 50px -34px rgba(139, 111, 71, .5);
+  overflow-x: auto;
+}
+/* 笺纸内框：双线朱砂 */
+.hj-card::before {
+  content: ""; position: absolute; inset: 8px; border: 1px solid rgba(var(--brand-rgb), .16);
+  border-radius: 8px; pointer-events: none;
+}
+/* 纸纹：极淡的斜线 + 暖色斑点，不抢字 */
+.hj-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: var(--r); pointer-events: none;
+  background-image:
+    repeating-linear-gradient(135deg, rgba(139, 111, 71, .028) 0 1px, transparent 1px 7px),
+    radial-gradient(circle at 82% 12%, rgba(var(--brand-rgb), .06), transparent 42%);
+}
+.hj-board { position: relative; z-index: 1; }
+
+.hj-board {
+  --cell: 40px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  grid-auto-rows: var(--cell);
+  width: calc(var(--cols) * var(--cell));
+  margin-inline: auto;
+  font-family: var(--serif);
+  /* 稿纸格：极淡的横竖细线，空格也保留格线，读起来才像一张笺 */
+  background-image:
+    linear-gradient(to right, rgba(139, 111, 71, .11) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 111, 71, .11) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  box-shadow: 0 0 0 1px rgba(139, 111, 71, .11);
+}
+
+.hj-cell {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  font-size: calc(var(--cell) * .56); line-height: 1; color: var(--ink);
+  user-select: none; border-radius: 2px; transition: background .16s ease, box-shadow .16s ease;
+}
+.hj-cell.is-given { letter-spacing: 0; }
+.hj-cell.is-void { }
+
+/* 空格：淡朱砂底 + 细红框，像稿纸上的待填格 */
+.hj-cell.is-blank {
+  background: rgba(var(--brand-tint-rgb), .30);
+  box-shadow: inset 0 0 0 1px rgba(var(--brand-rgb), .20);
+}
+.hj-cell.is-blank input {
+  width: 100%; height: 100%; padding: 0; border: 0; background: transparent;
+  font: inherit; text-align: center; color: var(--brand);
+  caret-color: var(--accent); border-radius: 2px;
+}
+.hj-cell.is-blank input:focus { outline: none; }
+
+/* 当前句高亮（横句为整行，竖句为整列） */
+.hj-cell.in-line:not(.is-blank) { background: rgba(44, 90, 118, .06); }
+.hj-cell.in-line.is-blank { background: rgba(var(--brand-tint-rgb), .52); }
+.hj-cell.is-sel { background: #fff !important; box-shadow: inset 0 0 0 2px var(--brand) !important; }
+
+/* 校对结果 */
+.hj-cell.is-ok input { color: var(--ok); }
+.hj-cell.is-ok { background: rgba(122, 132, 113, .10); box-shadow: inset 0 0 0 1px rgba(122, 132, 113, .38); }
+.hj-cell.is-bad { animation: hjShake .34s ease; }
+.hj-cell.is-bad input { color: var(--err); }
+@keyframes hjShake {
+  20% { transform: translateX(-3px); } 45% { transform: translateX(3px); }
+  70% { transform: translateX(-2px); } 100% { transform: translateX(0); }
+}
+
+/* 全卷补齐 */
+.hj-board.is-done .hj-cell.is-blank {
+  background: rgba(122, 132, 113, .08);
+  box-shadow: inset 0 0 0 1px rgba(122, 132, 113, .30);
+  animation: hjInk .5s ease both;
+}
+.hj-board.is-done .hj-cell input { color: var(--ink); }
+.hj-board.is-done .hj-cell.is-ok { animation: none; }
+@keyframes hjInk { from { opacity: .35; } to { opacity: 1; } }
+
+/* ---------- 侧栏 ---------- */
+.hj-panel { display: flex; flex-direction: column; gap: 20px; }
+@media (min-width: 1021px) {
+  .hj-panel { position: sticky; top: 96px; max-height: calc(100vh - 116px); overflow-y: auto; padding-right: 4px; }
+}
+
+.hj-meter { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink2); }
+.hj-meter b { font-family: var(--serif); font-size: 15px; color: var(--ink); font-weight: 600; }
+.hj-bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.hj-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--brand-tint) 0%, var(--brand-mid) 58%, var(--brand) 100%); transition: width .32s ease; }
+
+.hj-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.hj-actions .btn { flex: 1 1 auto; min-width: 88px; }
+
+.hj-box { border-top: 1px solid var(--line); padding-top: 16px; }
+.hj-box h3 {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  font-size: 12px; font-weight: 600; letter-spacing: .14em; color: var(--accent-ink);
+}
+.hj-box h3::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.hj-clue {
+  display: flex; align-items: baseline; gap: 8px; width: 100%;
+  padding: 6px 8px; border: 0; border-radius: var(--r-sm); background: transparent;
+  font-size: 13px; color: var(--ink2); text-align: left; transition: .15s ease;
+}
+.hj-clue:hover { background: var(--brand-soft); }
+.hj-clue.is-on { background: var(--accent-soft); color: var(--accent-dark); }
+.hj-clue b { font-family: var(--serif); font-weight: 600; color: var(--accent-ink); min-width: 1.1em; }
+.hj-clue span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hj-clue em { font-style: normal; font-size: 11px; color: var(--ink3); margin-left: auto; white-space: nowrap; }
+.hj-clue.is-ok b::after { content: "✓"; margin-left: 3px; color: var(--sage); font-size: 10px; }
+
+.hj-words { display: flex; flex-wrap: wrap; gap: 6px; }
+.hj-word {
+  font-family: var(--serif); font-size: 13px; padding: 2px 10px;
+  border: 1px solid var(--line2); border-radius: 999px; color: var(--ink2); background: #fff;
+}
+.hj-word small { font-family: var(--sans); font-size: 10px; color: var(--ink3); margin-left: 3px; }
+
+/* ---------- 补齐后的诗笺 ---------- */
+.hj-done { display: none; margin-top: 30px; }
+.hj-done.is-on { display: block; animation: hjUp .5s ease both; }
+@keyframes hjUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.hj-scroll {
+  position: relative; padding: 30px 32px; background: linear-gradient(180deg, #fff 0%, #FCF9F2 100%);
+  border: 1px solid var(--line2); border-radius: var(--r);
+  box-shadow: 0 1px 2px rgba(139, 111, 71, .05), 0 22px 44px -32px rgba(139, 111, 71, .45);
+}
+.hj-scroll::before { content: ""; position: absolute; inset: 9px; border: 1px solid rgba(var(--brand-rgb), .14); border-radius: 8px; pointer-events: none; }
+.hj-scroll h2 { font-family: var(--serif); font-size: 22px; font-weight: 500; padding-left: 14px; position: relative; }
+.hj-scroll h2::before { content: ""; position: absolute; left: 0; top: .32em; bottom: .26em; width: 4px; border-radius: 2px; background: var(--brand); }
+.hj-scroll .hj-sub { margin: 6px 0 18px; font-size: 13px; color: var(--ink3); }
+
+.hj-poem { display: flex; align-items: baseline; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.hj-poem:last-of-type { border-bottom: 0; }
+.hj-poem i {
+  flex: none; font-style: normal; font-size: 11px; color: #fff; background: var(--accent-ink);
+  border-radius: 2px; padding: 1px 5px; letter-spacing: .06em;
+}
+.hj-poem i.v { background: var(--brand); }
+.hj-poem span { font-family: var(--serif); font-size: 17px; letter-spacing: .05em; color: var(--ink); }
+.hj-poem em { font-style: normal; font-size: 12px; color: var(--ink3); margin-left: auto; white-space: nowrap; }
+
+.hj-seal {
+  margin-top: 20px; display: flex; align-items: center; gap: 10px; justify-content: flex-end;
+  font-family: var(--serif); font-size: 12px; color: var(--seal);
+}
+.hj-seal::after {
+  content: "花笺"; display: grid; place-items: center; width: 38px; height: 38px;
+  border: 1.5px solid var(--seal); border-radius: 3px; color: var(--seal);
+  font-size: 14px; letter-spacing: 0; line-height: 1;
+}

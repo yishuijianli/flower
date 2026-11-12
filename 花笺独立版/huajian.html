@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>花笺 · 荷花卷 · 知花屿</title>
+<meta name="description" content="知花屿花笺：把诗句铺成一张格子，横读竖读都成句，空格里填回被擦去的那一个花名。">
+<script>/* 首屏前先定好配色，避免主色闪一下 */try{var _t=new URLSearchParams(location.search).get("theme")||localStorage.getItem("flora_theme");var _K=["haitang","zhizi","songhua","oubi","yuanwei","dingxiang"];document.documentElement.setAttribute("data-theme",_K.indexOf(_t)>-1?_t:"haitang");}catch(e){}</script>
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/huajian.css">
+</head>
+<body data-base="." data-page="huajian">
+
+<header class="hj-pack-head">
+  <div class="wrap" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)">
+    <span class="serif" style="font-size:20px">知花屿 · 花笺</span>
+    <span class="tiny muted">独立版 · 荷花卷</span>
+  </div>
+</header>
+
+<main class="wrap hj-main">
+  <div class="page-head">
+    <div class="crumb"><span>独立版 / 荷花卷</span></div>
+    <h1>花笺 · 荷花卷</h1>
+    <p>把荷花诗铺在同一张格子上，横读是一句，竖读也是一句，交汇处共用一字。诗句里被擦去的只有花名——荷、莲、芙蓉、菡萏、芙蕖、水芝、藕花、莲叶……补回去，整张笺就活了。</p>
+  </div>
+
+  <div class="hj-vols" id="hjVols" aria-label="选择卷轴"></div>
+
+  <section class="hj-stage">
+    <div class="hj-card">
+      <div class="hj-board" id="hjBoard" role="group" aria-label="花笺格子"></div>
+    </div>
+
+    <aside class="hj-panel">
+      <div class="hj-meter" id="hjMeter">
+        <b>0 / 0</b>
+        <span class="hj-bar"><i id="hjBar"></i></span>
+        <small class="tiny">空格即花名</small>
+      </div>
+
+      <div class="hj-actions" id="hjActions">
+        <button class="btn btn-primary btn-sm" data-act="check" type="button">校对</button>
+        <button class="btn btn-ghost btn-sm" data-act="hint" type="button">提示</button>
+        <button class="btn btn-ghost btn-sm" data-act="reset" type="button">重来</button>
+      </div>
+
+      <div id="hjClues"></div>
+
+      <div class="hj-box">
+        <h3>本卷花名</h3>
+        <div class="hj-words" id="hjWords"></div>
+      </div>
+
+      <p class="tiny" style="margin-top:-4px">点左侧词条可高亮该句；同一格横竖共用，填一字通两句。</p>
+    </aside>
+  </section>
+
+  <section class="hj-done" id="hjDone" aria-live="polite"></section>
+</main>
+
+<script src="data/huajian.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/huajian.js"></script>
+</body>
+</html>
