@@ -1,0 +1,558 @@
+:root {
+  --primary: #4a90e2;
+  --primary-light: #7db3e8;
+  --success: #56b84c;
+  --warning: #e8a33d;
+  --error: #e94e77;
+  --bg: #eef4ea;
+  --card: rgba(255, 255, 255, 0.9);
+  --text: #2f3a33;
+  --muted: #7a877e;
+  --line: #e4ebe4;
+  --shadow: 0 12px 32px rgba(47, 78, 55, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', Tahoma, sans-serif;
+  background-color: var(--bg);
+  /* 背景照片由 script.js 随机挑选并写入 --bg-photo，叠加浅色蒙层保证可读性 */
+  background-image:
+    linear-gradient(180deg, rgba(247, 250, 246, 0.74), rgba(240, 246, 238, 0.86)),
+    var(--bg-photo, none);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--text);
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+  width: 100%;
+  padding: 28px 22px 12px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+header h1 {
+  font-size: 28px;
+  margin: 0 0 6px;
+  letter-spacing: 1px;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.timer-section {
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  border-radius: 22px;
+  padding: 30px 24px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.timer-display {
+  font-size: 60px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  letter-spacing: 1px;
+  margin: 8px 0 22px;
+  line-height: 1;
+}
+
+.timer-display .sep {
+  color: var(--muted);
+  margin: 0 4px;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.timer-display.running {
+  color: var(--primary);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.timer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.start-btn {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.start-btn:hover {
+  background: var(--primary-light);
+}
+
+.start-btn:active {
+  transform: scale(0.98);
+}
+
+.start-btn[disabled] {
+  background: #b9c4bd;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 14px 18px;
+  font-size: 15px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f4f7f4;
+  color: var(--text);
+}
+
+.timer-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 16px 0 0;
+  min-height: 16px;
+}
+
+.garden-section,
+.encyclopedia-section {
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.section-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* ---------- 花园 ---------- */
+.plant-card {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  padding: 14px;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #f6fbf4, #ebf6ea);
+  border: 1px solid #dcefdc;
+}
+
+.plant-visual {
+  position: relative;
+  width: 118px;
+  height: 152px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #e7f0e7;
+  box-shadow: 0 6px 16px rgba(47, 78, 55, 0.12);
+}
+
+.plant-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+  animation: breathe 8s ease-in-out infinite;
+  transition: filter 0.45s ease, opacity 0.45s ease;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+
+.plant-stage-badge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+.plant-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.plant-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plant-title-row h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.plant-status {
+  font-size: 12px;
+  color: var(--warning);
+  text-align: right;
+}
+
+.progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: #dfe9df;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fd47a, var(--success));
+  transition: width 0.3s ease;
+}
+
+.plant-progress-text {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* ---------- 选种子 ---------- */
+.seed-picker p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.seed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.seed-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 9px;
+  padding: 10px 10px 11px;
+  background: #f7faf6;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.25s, border-color 0.2s;
+}
+
+.seed-btn:hover {
+  transform: translateY(-3px);
+  border-color: #cfe6cf;
+  box-shadow: 0 10px 22px rgba(86, 184, 76, 0.16);
+}
+
+.seed-btn .seed-photo {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+  border-radius: 11px;
+  object-fit: cover;
+  box-shadow: 0 3px 10px rgba(47, 78, 55, 0.12);
+  transition: transform 0.4s ease;
+}
+
+.seed-btn:hover .seed-photo {
+  transform: scale(1.025);
+}
+
+.seed-btn .seed-name {
+  font-size: 13px;
+  color: var(--text);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- 图鉴 ---------- */
+.encyclopedia-card {
+  position: relative;
+  padding: 10px 10px 14px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid var(--line);
+  background: #fbfdf9;
+  transition: transform 0.2s, box-shadow 0.25s;
+}
+
+.encyclopedia-card.acquired {
+  background: linear-gradient(160deg, #fff8ec, #f2fbf0);
+  border-color: #f0e2c4;
+}
+
+.encyclopedia-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(47, 78, 55, 0.1);
+}
+
+.encyclopedia-card .card-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: #eef3ee;
+  transition: filter 0.35s, opacity 0.35s;
+}
+
+.encyclopedia-card.locked .card-photo {
+  filter: grayscale(1) blur(2px);
+  opacity: 0.42;
+}
+
+.encyclopedia-card h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.encyclopedia-card.locked h3 {
+  color: #b7c1b9;
+}
+
+.encyclopedia-card .card-status {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.encyclopedia-card .badge {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 2px 9px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #9a6b12;
+  background: #fdf0d2;
+  border-radius: 999px;
+}
+
+.encyclopedia-card .count {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 1px 7px;
+  font-size: 10px;
+  color: #fff;
+  background: rgba(47, 58, 51, 0.55);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+}
+
+/* ---------- 统计 ---------- */
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 10px;
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.stat {
+  flex: 1;
+}
+
+.stat .stat-num {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.stat .stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 22px 0 24px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: auto;
+}
+
+/* ---------- 开花弹层 ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 45, 35, 0.35);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay-card {
+  width: 100%;
+  max-width: 330px;
+  padding: 30px 26px;
+  background: #fffdf8;
+  border-radius: 22px;
+  text-align: center;
+  box-shadow: 0 22px 56px rgba(30, 50, 35, 0.25);
+  animation: popIn 0.35s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.bloom-emoji {
+  font-size: 84px;
+  line-height: 1;
+  animation: bloomPop 0.6s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.bloom-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 12px 30px rgba(47, 78, 55, 0.22);
+  border: 4px solid #fff;
+}
+
+@keyframes bloomPop {
+  0% { transform: scale(0.2) rotate(-15deg); opacity: 0; }
+  70% { transform: scale(1.15) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.overlay-card h2 {
+  margin: 16px 0 6px;
+  font-size: 21px;
+}
+
+.overlay-card p {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translate(-50%, 20px);
+  z-index: 20;
+  padding: 11px 18px;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(47, 58, 51, 0.92);
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 380px) {
+  .container { padding: 22px 16px 10px; }
+  .timer-display { font-size: 52px; }
+  .plant-visual { width: 96px; height: 128px; }
+  .plant-title-row { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .plant-status { text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plant-photo,
+  .timer-display .sep,
+  .bloom-emoji {
+    animation: none;
+  }
+}

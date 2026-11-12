@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomata - 番茄钟种花</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌿 Tomata</h1>
+      <p>专注种花，一步一开</p>
+    </header>
+
+    <main class="timer-section">
+      <div class="timer-display" id="timerDisplay">
+        <span id="minutes">25</span><span class="sep">:</span><span id="seconds">00</span>
+      </div>
+      <div class="timer-actions">
+        <button class="start-btn" id="primaryBtn">开始专注</button>
+        <button class="btn-secondary" id="interruptBtn" hidden>中断</button>
+      </div>
+      <p class="timer-hint" id="timerHint">专注 25 分钟，让花朵绽放</p>
+    </main>
+
+    <section class="garden-section" id="gardenSection">
+      <div class="section-head">
+        <h2>我的花园</h2>
+        <span class="section-meta" id="gardenHint"></span>
+      </div>
+      <div id="gardenContent"></div>
+    </section>
+
+    <section class="encyclopedia-section">
+      <div class="section-head">
+        <h2>图鉴</h2>
+        <span class="section-meta" id="encyclopediaCount"></span>
+      </div>
+      <div class="grid" id="encyclopediaGrid"></div>
+    </section>
+
+    <section class="stats-section" id="stats"></section>
+
+    <footer>
+      <p>中断不会枯死，会变成花苞，下次继续 🌾</p>
+    </footer>
+  </div>
+
+  <div class="overlay" id="bloomOverlay" hidden>
+    <div class="overlay-card">
+      <div class="bloom-emoji" id="bloomEmoji">🌸</div>
+      <h2>开花啦！</h2>
+      <p id="bloomText"></p>
+      <button class="start-btn" id="bloomClose">收入图鉴</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
